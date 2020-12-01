@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <html>
+    <head>
+        <title>OAuth2 Sample App - Intuit</title>
+        <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script>
+            if (window.opener) {
+                window.opener.location.href = '/sampleAppOAuth2/'
+                window.close()
+            }
+        </script>
+    </head>
+    <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand">Intuit PoC sample</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        {# Feel free to remove this part #}
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav ml-auto flex align-items-center justify-content-center">
+                <a href="https://github.com/ashutosh1297" target="_blank" class="btn btn-light">
+                    <img
+                            style="height: 20px"
+                            src="{% static "github-icon-png-8.png" %}" alt="My image"
+                    />
+                </a>
+                <a href="https://gitlab.com/ashutosh1297" target="_blank" class="btn btn-light ml-3">
+                    <img
+                            style="height: 20px"
+                            src="{% static "gitlab-icon-rgb.png" %}" alt="My image"
+                    />
+                </a>
+                <strong class="text-light ml-3">Ashutosh Sharma</strong>
+            </div>
+        </div>
+    </nav>
+    {#<div id="loggedIn">#}
+    {#</div>#}
+    <div class="container my-4">
+        <h3>Hello,</h3>
+        <h5>This project is bootstrapped from Intuit open source example <a
+                href="https://github.com/IntuitDeveloper/OAuth2PythonSampleApp">git.</a></h5>
+        <p>
+            The purpose of this project is to fetch CustomerBalance data from QuickBook's API and store it to a SQL
+            database.
+            This project uses <a href="https://www.djangoproject.com/">Django</a> for template rendering,
+            <a href="https://www.sqlalchemy.org/">SQLAlchemy</a> for storing data on a local sqlite database and
+            <a href="https://www.getbootstrap.com/">Bootstrap</a> for UI.
+        </p>
+        Before using this app, please make sure you do the following:
+        <ul>
+            <li>
+                Update settings.py with your <code>Client ID</code> and <code>Client Secret</code> (found on
+                <a class="link" href="https://developer.intuit.com">developer.intuit.com</a>
+                )
+            </li>
+
+            <li>
+                In <a href="https://developer.intuit.com">developer.intuit.com</a>,
+                add an allowed Redirect URI to this sample app! (settings.py value: <code>REDIRECT_URI</code>)
+            </li>
+
+            <li>
+                In your command prompt type, <kbd>python manage.py runserver</kbd>
+            </li>
+        </ul>
+        <br/><br/><br/>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6  text-center">
+                <!-- Sign In With Intuit Button -->
+                <b>Sign In With Intuit</b><br/>
+                <a class="imgLink" href="#" onclick="launchPopup('/sampleAppOAuth2/signInWithIntuit/')">
+                    <img
+                            style="height: 40px"
+                            src="{% static "IntuitSignIn-lg-white@2x.jpg" %}" alt="My image"
+                    />
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-6  text-center">
+                <!-- Connect To QuickBooks Button -->
+                <b>Connect To QuickBooks</b><br/>
+                <a class="imgLink" href="#" onclick="launchPopup('/sampleAppOAuth2/connectToQuickbooks/')">
+                    <img
+                            style="height: 40px"
+                            src="{% static 'C2QB_white_btn_lg_default.png' %}"
+                            onmouseover="this.src='{% static 'C2QB_white_btn_lg_hover.png' %}'"
+                            onmouseout="this.src='{% static 'C2QB_white_btn_lg_default.png' %}'"
+                    />
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function launchPopup(path) {
+            var win;
+            var checkConnect;
+            var parameters = "location=1,width=800,height=650";
+            parameters += ",left=" + (screen.width - 800) / 2 + ",top=" + (screen.height - 650) / 2;
+
+            // Launch Popup
+            win = window.open(path, 'connectPopup', parameters);
+        }
+    </script>
+
+    </body>
+    </html>
+{% endblock %}

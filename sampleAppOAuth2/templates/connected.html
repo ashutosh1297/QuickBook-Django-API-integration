@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<html>
+<head>
+    <title>PoC - Intuit</title>
+    <link rel="stylesheet" type="text/css" href="{% static "style.css" %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        if (window.opener) {
+            window.opener.location.href = '/sampleAppOAuth2/connected'
+            window.close()
+        }
+    </script>
+    <script>
+        function apiCall() {
+            $("#result").html('Loading...')
+            $.get("/sampleappoauth2/apiCall", function (data) {
+                $("#result").html('Models have updated, refresh the page. <br/>' + data)
+                $("#no-data").html('')
+            })
+        }
+
+        function revokeCall() {
+            $("#result").html('Loading...')
+            $.get("/sampleappoauth2/disconnect", function (data) {
+                $("#result").html(data)
+            })
+        }
+
+        function refreshCall() {
+            $("#result").html('Loading...')
+            $.get("/sampleappoauth2/refreshTokenCall", function (data) {
+                $("#result").html(JSON.stringify(data, null, 2))
+            })
+        }
+
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/sampleappoauth2/">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-nav ml-auto">
+        <button onclick="refreshCall()" class="btn btn-outline-success my-2 my-sm-0 mr-2" type="submit">Refresh Token</button>
+        <button onclick="revokeCall()" class="btn btn-outline-danger my-2 my-sm-0" type="submit">Revoke Token</button>
+    </div>
+  </div>
+</nav>
+{#<a href="/sampleappoauth2/" class="btn btn-primary">Home</a>#}
+<div class="container text-center">
+    <h3>Welcome{{ first_name }}!</h3>
+    Status: <span class="badge badge-success">Connected to Intuit account!</span>
+    <p>Currently running in development sandbox of Intuit.</p>
+    <button class="btn btn-dark" onclick="apiCall()">Update Customer Balance</button>
+    <br>
+    <br>
+    <p class="text-muted"><a href="https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customerbalance">CustomerBalance</a> will be called.</p>
+    <div><code id="result"></code></div>
+</div>
+
+<div>
+    <div class="container mt-2">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Balance</th>
+                </tr>
+            </thead>
+            {% if customer_balances|length == 0 %}
+                <TR>
+                    <TD colspan="3" class="text-center"><span id="no-data">No data yet.</span></TD>
+                </TR>
+            {% else %}
+                {% for balance in customer_balances %}
+                <TR>
+                   <TD class="c2">{{balance.id}}</TD>
+                   <TD class="c2">{{balance.customer}}</TD>
+                   <TD class="c3">{{balance.balance}}</TD>
+                </TR>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}
